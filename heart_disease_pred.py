@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, font, ttk
 import joblib
 import numpy as np
 
@@ -88,9 +88,9 @@ def predict_heart_disease():
             raise ValueError("Major Vessels must be between 0 and 3.")
         inputs.append(int(entry_ca.get()))
         
-        # Thal (int, 0 to 2)
-        if not is_valid_input(entry_thal.get(), int, 0, 2):
-            raise ValueError("Thal must be 0 (Normal), 1 (Fixed Defect), or 2 (Reversible Defect).")
+        # Thal (int, 1 to 3)
+        if not is_valid_input(entry_thal.get(), int, 1, 3):
+            raise ValueError("Thal must be 1 (Normal), 2 (Fixed Defect), or 3 (Reversible Defect).")
         inputs.append(int(entry_thal.get()))
         
         # Reshape input for a single prediction
@@ -99,16 +99,40 @@ def predict_heart_disease():
         # Get probability of heart disease
         probability = model.predict_proba(input_array)[0][1]
 
-        # Display result to 3 decimal places
-        messagebox.showinfo("Prediction Result", f"Heart Disease Probability (0-1): {probability:.3f}")
-    
+        # Format return message conditionally based on probability
+        if 0 <= probability <= 0.2:
+            message = "Very Low Risk"
+            color = "green"
+        elif 0.2 < probability <= 0.4:
+            message = "Moderately Low Risk"
+            color = "#9ACD32"  # Greenish-yellow
+        elif 0.4 < probability <= 0.6:
+            message = "Moderate Risk"
+            color = "yellow"
+        elif 0.6 < probability <= 0.8:
+            message = "High Risk"
+            color = "orange"
+        elif 0.8 < probability <= 1:
+            message = "Very High Risk"
+            color = "red"
+        else:
+            message = "Error in prediction"
+            color = "black"
+
+        # Display result directly in the app window
+        result_label.config(text=f"Heart Disease Probability (0-1):\n{probability:.3f}\n{message}", font=("Helvetica", 16), fg=color)
     except ValueError as e:
-        # Display the error message
-        messagebox.showerror("Invalid input", str(e))
+        # Update the result label with an error message
+        result_label.config(text=f"Error in Values entered:\n{e}", font=("Helvetica", 16, "bold"), fg="red")
 
 # Set up Tkinter GUI
 app = tk.Tk()
 app.title("Heart Disease Prediction")
+app_font = font.Font(family="Helvetica", size=15)
+app.configure(bg="#f0f0f5") 
+
+header_label = tk.Label(app, text="Heart Disease Prediction App", font=("Helvetica", 16, "bold"), bg="#004080", fg="white")
+header_label.grid(row=0, column=0, columnspan=2, pady=(20,20))
 
 # Feature input fields with labels
 labels = [
@@ -121,9 +145,11 @@ labels = [
 
 # Create entry fields dynamically
 entries = []
-for i, label in enumerate(labels):
-    tk.Label(app, text=label).grid(row=i, column=0, padx=10, pady=5, sticky="w")
-    entry = tk.Entry(app)
+for i, label_text in enumerate(labels, start=1):
+    label = tk.Label(app, text=label_text, font=app_font, anchor="center", bg="#f0f0f5", fg="#333333")
+    label.grid(row=i, column=0, padx=10, pady=5, sticky="w")
+
+    entry = tk.Entry(app, font=app_font, width=15, bg="white", fg="black", bd=2, relief="solid")
     entry.grid(row=i, column=1, padx=10, pady=5)
     entries.append(entry)
 
@@ -133,8 +159,24 @@ for i, label in enumerate(labels):
  entry_ca, entry_thal) = entries
 
 # Submit button
-submit_button = tk.Button(app, text="Submit", command=predict_heart_disease)
-submit_button.grid(row=len(labels), column=0, columnspan=2, pady=20)
+submit_button = tk.Button(
+    app, text="Submit", font=("Helvetica", 12, "bold"),
+    bg="#004080", fg="white", activebackground="#0059b3", activeforeground="white",
+    command=predict_heart_disease, bd=3, relief="raised", width=10
+)
+submit_button.grid(row=len(labels)+1, column=0, columnspan=2, pady=(20, 20))
+
+# Separator for formatting
+separator = ttk.Separator(app, orient="horizontal")
+separator.grid(row=len(labels) + 2, column=0, columnspan=2, sticky="ew", pady=(10, 10))
+
+# Descriptive header for result
+result_hd_label = tk.Label(app, text="Predicted Result:", font=("Helvetica", 20, "bold"))
+result_hd_label.grid(row=len(labels) + 3, column=0, columnspan=2, pady=2)
+
+# Result label to display prediction
+result_label = tk.Label(app, text="", font=("Helvetica", 12, "italic"), bg="#f0f0f5")
+result_label.grid(row=len(labels) + 4, column=0, columnspan=2, pady=10)
 
 # Run the Tkinter event loop
 app.mainloop()
