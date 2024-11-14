@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox, font, ttk
 import joblib
 import numpy as np
 
@@ -123,12 +122,12 @@ def predict_heart_disease():
         result_label.config(text=f"Heart Disease Probability (0-1):\n{probability:.3f}\n{message}", font=("Helvetica", 16), fg=color)
     except ValueError as e:
         # Update the result label with an error message
-        result_label.config(text=f"Error in Values entered:\n{e}", font=("Helvetica", 16, "bold"), fg="red")
+        result_label.config(text=f"Error in values entered:\n{e}", font=("Helvetica", 16, "bold"), fg="red")
 
 # Set up Tkinter GUI
 app = tk.Tk()
 app.title("Heart Disease Prediction")
-app_font = font.Font(family="Helvetica", size=15)
+app_font = ("Helvetica", 15)
 app.configure(bg="#f0f0f5") 
 
 header_label = tk.Label(app, text="Heart Disease Prediction App", font=("Helvetica", 16, "bold"), bg="#004080", fg="white")
@@ -167,7 +166,7 @@ submit_button = tk.Button(
 submit_button.grid(row=len(labels)+1, column=0, columnspan=2, pady=(20, 20))
 
 # Separator for formatting
-separator = ttk.Separator(app, orient="horizontal")
+separator = tk.Canvas(app, height=2, bg="#d3d3d3", bd=0, relief="flat")
 separator.grid(row=len(labels) + 2, column=0, columnspan=2, sticky="ew", pady=(10, 10))
 
 # Descriptive header for result
