@@ -8,125 +8,138 @@
     <title>Heart Disease Prediction</title>
     <script src="/static/js/validation.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Heart Disease Prediction</h1>
+<body class="container">
+    <div class="container my-4">
+        <div class="row">
+            <h1 id="banner" class="col text-center">Heart Disease Prediction ML</h1>
+        </div>
     </div>
 
     {% if error_message %}
         <p style="color: red;">{{ error_message }}</p>
     {% endif %}
-
-    <form method="POST" class="container py-1">
-        <div class="row py-2">
-            <label for="age" class="col-md-4 col-form-label ">Age:</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="age" name="age" value="{{ request.form.age }}" onchange="validateField('age', 'error-age')">
-                <p id="error-age" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="sex" class="col-md-4 col-form-label">Sex (0=Female, 1=Male):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="sex" name="sex" value="{{ request.form.sex }}" onchange="validateField('sex', 'error-sex')">
-                <p id="error-sex" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="cp" class="col-md-4 col-form-label ">Chest Pain Type (0=Typical Angina, 1=Atypical Angina, 2=Non-Anginal Pain, 3=Asymptomatic):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="cp" name="cp" value="{{ request.form.cp }}" onchange="validateField('cp', 'error-cp')">
-                <p id="error-cp" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="trestbps" class="col-md-4 col-form-label ">Resting Blood Pressure (in mm Hg):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="trestbps" name="trestbps" value="{{ request.form.trestbps }}" onchange="validateField('trestbps', 'error-trestbps')">
-                <p id="error-trestbps" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="chol" class="col-md-4 col-form-label ">Serum Cholesterol (in mg/dl):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="chol" name="chol" value="{{ request.form.chol }}" onchange="validateField('chol', 'error-chol')">
-                <p id="error-chol" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="fbs" class="col-md-4 col-form-label ">Fasting Blood Sugar (1=Yes, 0=No):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="fbs" name="fbs" value="{{ request.form.fbs }}" onchange="validateField('fbs', 'error-fbs')">
-                <p id="error-fbs" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="restecg" class="col-md-4 col-form-label">Resting Electrocardiographic Results (0=Normal, 1=Having ST-T wave abnormality, 2=Showing probable or definite left ventricular hypertrophy):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="restecg" name="restecg"  class="justify-content" value="{{ request.form.restecg }}" onchange="validateField('restecg', 'error-restecg')">
-                <p id="error-restecg" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="thalach" class="col-md-4">Maximum Heart Rate Achieved:</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="thalach" name="thalach" value="{{ request.form.thalach }}" onchange="validateField('thalach', 'error-thalach')">
-                <p id="error-thalach" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="exang" class="col-md-4">Exercise Induced Angina (1=Yes, 0=No):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="exang" name="exang" value="{{ request.form.exang }}" onchange="validateField('exang', 'error-exang')">
-                <p id="error-exang" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="oldpeak" class="col-md-4">Depression Induced by Exercise Relative to Rest:</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="oldpeak" name="oldpeak" value="{{ request.form.oldpeak }}" onchange="validateField('oldpeak', 'error-oldpeak')">
-                <p id="error-oldpeak" style="display: none;"></p>
-            </div>
-            
-        </div>
-
-        <div class="row py-2">
-            <label for="slope" class="col-md-4">Slope of the Peak Exercise ST Segment (0=Upsloping, 1=Flat, 2=Downsloping):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="slope" name="slope" value="{{ request.form.slope }}" onchange="validateField('slope', 'error-slope')">
-                <p id="error-slope" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="ca" class="col-md-4">Number of Major Vessels Colored by Fluoroscopy (0-3):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="ca" name="ca" value="{{ request.form.ca }}" onchange="validateField('ca', 'error-ca')">
-                <p id="error-ca" style="display: none;"></p>
-            </div>
-        </div>
-
-        <div class="row py-2">
-            <label for="thal" class="col-md-4">Thalassemia (1=Normal, 2=Fixed Defect, 3=Reversible Defect):</label>
-            <div class="col-md-4 d-flex align-items-center">
-                <input type="text" id="thal" name="thal" value="{{ request.form.thal }}" onchange="validateField('thal', 'error-thal')">
-                <p id="error-thal" style="display: none;"></p>
-            </div>
-        </div>
-    </form>
-
+    
     <div class="container">
-        <button type="submit" class="row-md-12">Submit</button>
+        <div class="row">
+            <div class="col-md-6">
+                <form method="POST" action="/predict" class="container">
+                    <div class="row py-2">
+                        <label for="age" class="col-md-8 col-form-label">Age:</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="age" name="age" value="{{ request.form.age }}" onchange="validateField('age', 'error-age')">
+                        </div>
+                        <p id="error-age" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="sex" class="col-md-8 col-form-label">Sex (0=Female, 1=Male):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="sex" name="sex" value="{{ request.form.sex }}" onchange="validateField('sex', 'error-sex')">
+                        </div>
+                        <p id="error-sex" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="cp" class="col-md-8 col-form-label">Chest Pain Type (0=Typical Angina, 1=Atypical Angina, 2=Non-Anginal Pain, 3=Asymptomatic):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="cp" name="cp" value="{{ request.form.cp }}" onchange="validateField('cp', 'error-cp')">
+                        </div>
+                        <p id="error-cp" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="trestbps" class="col-md-8 col-form-label ">Resting Blood Pressure (in mm Hg):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="trestbps" name="trestbps" value="{{ request.form.trestbps }}" onchange="validateField('trestbps', 'error-trestbps')">
+                        </div>
+                        <p id="error-trestbps" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="chol" class="col-md-8 col-form-label ">Serum Cholesterol (in mg/dl):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="chol" name="chol" value="{{ request.form.chol }}" onchange="validateField('chol', 'error-chol')">
+                        </div>
+                        <p id="error-chol" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="fbs" class="col-md-8 col-form-label ">Fasting Blood Sugar (1=Yes, 0=No):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="fbs" name="fbs" value="{{ request.form.fbs }}" onchange="validateField('fbs', 'error-fbs')">
+                        </div>
+                        <p id="error-fbs" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="restecg" class="col-md-8 col-form-label">Resting Electrocardiographic Results (0=Normal, 1=Having ST-T wave abnormality, 2=Showing probable or definite left ventricular hypertrophy):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="restecg" name="restecg"  class="justify-content" value="{{ request.form.restecg }}" onchange="validateField('restecg', 'error-restecg')">
+                        </div>
+                        <p id="error-restecg" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="thalach" class="col-md-8">Maximum Heart Rate Achieved:</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="thalach" name="thalach" value="{{ request.form.thalach }}" onchange="validateField('thalach', 'error-thalach')">
+                        </div>
+                        <p id="error-thalach" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="exang" class="col-md-8">Exercise Induced Angina (1=Yes, 0=No):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="exang" name="exang" value="{{ request.form.exang }}" onchange="validateField('exang', 'error-exang')">
+                        </div>
+                        <p id="error-exang" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="oldpeak" class="col-md-8">Depression Induced by Exercise Relative to Rest:</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="oldpeak" name="oldpeak" value="{{ request.form.oldpeak }}" onchange="validateField('oldpeak', 'error-oldpeak')">
+                        </div>
+                        <p id="error-oldpeak" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="slope" class="col-md-8">Slope of the Peak Exercise ST Segment (0=Upsloping, 1=Flat, 2=Downsloping):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="slope" name="slope" value="{{ request.form.slope }}" onchange="validateField('slope', 'error-slope')">
+                        </div>
+                        <p id="error-slope" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="ca" class="col-md-8">Number of Major Vessels Colored by Fluoroscopy (0-3):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="ca" name="ca" value="{{ request.form.ca }}" onchange="validateField('ca', 'error-ca')">
+                        </div>
+                        <p id="error-ca" style="display: none;"></p>
+                    </div>
+            
+                    <div class="row py-2">
+                        <label for="thal" class="col-md-8">Thalassemia (1=Normal, 2=Fixed Defect, 3=Reversible Defect):</label>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input type="text" id="thal" name="thal" value="{{ request.form.thal }}" onchange="validateField('thal', 'error-thal')">
+                        </div>
+                        <p id="error-thal" style="display: none;"></p>
+                    </div>
+                </form>
+            </div>
+            <div id="result-window" class="col-md-6 border rounded shadow-sm mt-3 mt-md-0">
+                <!-- Result Display -->
+                <div id="result-area" class="p-3 ">
+                    <h4>Prediction Result</h4>
+                    <p id="result-text" class="mt-3 text-muted">The prediction result will appear here after submission.</p>
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary align-self-start">Submit</button>
+            </div>
+        </div>
     </div>
+    
 
     {% if probability %}
         <h3>Prediction: {{ probability }} - {{ message }}</h3>

@@ -4,9 +4,22 @@ body {
     margin: 0;
 }
 
-form {
+#result-window, form {
     background: rgba(255, 255, 255, 0.75); /* White with slight transparency */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+input[type="text"] {
+    width: 100%;
+    min-width: 0;
+}
+
+#banner{
+    background-color: #003366; /* Deep blue background */
+    color: white; /* White text */
+    padding: 20px; /* Optional: Add some padding for better spacing */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    text-align: center; /* Optional: Center the text */
 }
