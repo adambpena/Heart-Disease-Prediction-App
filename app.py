@@ -49,41 +49,36 @@ def predict_heart_disease(inputs):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    errors = {}
-    if request.method == "POST":
-        # Collect inputs from the form
-        inputs = []
-        
-        # Validate each input
-        fields = [
-            ("age", float, 0, 120),
-            ("sex", int, 0, 1),
-            ("cp", int, 0, 3),
-            ("trestbps", float, 50, 300),
-            ("chol", float, 100, 600),
-            ("fbs", int, 0, 1),
-            ("restecg", int, 0, 2),
-            ("thalach", float, 50, 250),
-            ("exang", int, 0, 1),
-            ("oldpeak", float, 0, 6),
-            ("slope", int, 0, 2),
-            ("ca", int, 0, 3),
-            ("thal", int, 1, 3)
-        ]
-        
-        for field, field_type, min_val, max_val in fields:
-            value = request.form.get(field)
-            if not is_valid_input(value, field_type, min_val, max_val):
-                errors[field] = f"Invalid input for {field}. Please check your values."
-            else:
-                inputs.append(field_type(value))
-        
-        # If no errors, make prediction
-        if not errors:
-            probability, message, color = predict_heart_disease(inputs)
-            return render_template("index.html", probability=probability, message=message, color=color, errors=errors)
+    return render_template("index.html")
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        age = int(request.form['age'])
+        sex = int(request.form['sex'])
+        cp = int(request.form['cp'])
+        trestbps = int(request.form['trestbps'])
+        chol = int(request.form['chol'])
+        fbs = int(request.form['fbs'])
+        restecg = int(request.form['restecg'])
+        thalach = int(request.form['thalach'])
+        exang = int(request.form['exang'])
+        oldpeak = float(request.form['oldpeak'])
+        slope = int(request.form['slope'])
+        ca = int(request.form['ca'])
+        thal = int(request.form['thal'])
+
+        # Call the predict_heart_disease function
+        inputs = [age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
+        probability, message, color = predict_heart_disease(inputs)
+
+        # Return the result to be displayed
+        return render_template('index.html', probability=probability, message=message, color=color)
     
-    return render_template("index.html", errors=errors)
+    except ValueError as e:
+        # Handle the case where conversion to int or float fails
+        error_message = "Invalid input: " + str(e)
+        return render_template('index.html', error_message=error_message)
 
 if __name__ == "__main__":
     app.run(debug=True)
