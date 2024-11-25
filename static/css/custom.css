@@ -5,10 +5,10 @@ body {
 }
 
 #result-window, form {
-    background: rgba(255, 255, 255, 0.75); /* White with slight transparency */
+    background: rgba(255, 255, 255, 0.75); 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"] {
@@ -17,9 +17,50 @@ input[type="text"] {
 }
 
 #banner{
-    background-color: #003366; /* Deep blue background */
-    color: white; /* White text */
-    padding: 20px; /* Optional: Add some padding for better spacing */
-    border-radius: 10px; /* Optional: Add rounded corners */
-    text-align: center; /* Optional: Center the text */
+    background-color: #003366; 
+    color: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    text-align: center; 
+}
+
+#result-display {
+    text-align: center;
+    font-size: 42px;
+    background: rgba(205, 227, 249, 0.913);
+    border-radius: 10px;
+}
+
+#result {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    font-size: 42px;
+    color: #003366;
+}
+
+#result-msg {
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: bold;
+
+}
+
+[id^="error-"] {
+    font-size: small;
+    padding-left: 2%;
+    margin: 0;
+}
+
+#randoButton {
+    background-color: white;
+    color: #74b2f5;
+    border: 2px solid #74b2f5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        color: white;
+        background-color: #74b2f5;
+    }
 }
