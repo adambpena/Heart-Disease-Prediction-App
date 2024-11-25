@@ -5,7 +5,7 @@ function validate(fieldId) {
     // Age (float, 0 to 120)
     if (fieldId === 'age') {
         const age = parseFloat(value);
-        if (isNaN(age) || age < 0 || age > 120) {
+        if (isNaN(age) || age < 0 || age > 120 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -21,15 +21,15 @@ function validate(fieldId) {
     // Chest Pain Type (int, 0 to 3)
     if (fieldId === 'cp') {
         const cp = parseInt(value);
-        if (isNaN(cp) || cp < 0 || cp > 3) {
+        if (isNaN(cp) || cp < 0 || cp > 3 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
     
-    // Resting Blood Pressure (float, 50 to 300)
+    // Resting Blood Pressure (float, 50 to 200)
     if (fieldId === 'trestbps') {
         const trestbps = parseFloat(value);
-        if (isNaN(trestbps) || trestbps < 50 || trestbps > 300) {
+        if (isNaN(trestbps) || trestbps < 50 || trestbps > 200 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -37,7 +37,7 @@ function validate(fieldId) {
     // Serum Cholesterol (float, 100 to 600)
     if (fieldId === 'chol') {
         const chol = parseFloat(value);
-        if (isNaN(chol) || chol < 100 || chol > 600) {
+        if (isNaN(chol) || chol < 100 || chol > 600 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -53,7 +53,7 @@ function validate(fieldId) {
     // Resting ECG Results (int, 0 to 2)
     if (fieldId === 'restecg') {
         const restecg = parseInt(value);
-        if (isNaN(restecg) || restecg < 0 || restecg > 2) {
+        if (isNaN(restecg) || restecg < 0 || restecg > 2 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -61,7 +61,7 @@ function validate(fieldId) {
     // Max Heart Rate Achieved (float, 50 to 250)
     if (fieldId === 'thalach') {
         const thalach = parseFloat(value);
-        if (isNaN(thalach) || thalach < 50 || thalach > 250) {
+        if (isNaN(thalach) || thalach < 50 || thalach > 250 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -77,7 +77,7 @@ function validate(fieldId) {
     // ST Depression (Oldpeak, float, 0 to 6)
     if (fieldId === 'oldpeak') {
         const oldpeak = parseFloat(value);
-        if (isNaN(oldpeak) || oldpeak < 0 || oldpeak > 6) {
+        if (isNaN(oldpeak) || oldpeak < 0 || oldpeak > 6 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -85,7 +85,7 @@ function validate(fieldId) {
     // Slope of Peak Exercise ST Segment (int, 0 to 2)
     if (fieldId === 'slope') {
         const slope = parseInt(value);
-        if (isNaN(slope) || slope < 0 || slope > 2) {
+        if (isNaN(slope) || slope < 0 || slope > 2 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -93,7 +93,7 @@ function validate(fieldId) {
     // Major Vessels Colored by Flourosopy (int, 0 to 3)
     if (fieldId === 'ca') {
         const ca = parseInt(value);
-        if (isNaN(ca) || ca < 0 || ca > 3) {
+        if (isNaN(ca) || ca < 0 || ca > 3 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -101,7 +101,7 @@ function validate(fieldId) {
     // Thal (int, 1 to 3)
     if (fieldId === 'thal') {
         const thal = parseInt(value);
-        if (isNaN(thal) || thal < 1 || thal > 3) {
+        if (isNaN(thal) || thal < 1 || thal > 3 || !/^\d+(\.\d+)?$/.test(value)) {
             return false;
         }
     }
@@ -111,18 +111,21 @@ function validate(fieldId) {
 
 function validateField(fieldId, errorMsgId) {
     const errorMsg = document.getElementById(errorMsgId);
-    if (!validate(fieldId, errorMsgId)) {
+    if (!validate(fieldId)) {
         errorMsg.textContent = getErrorMessage(fieldId);
         errorMsg.style.color = "red";
         errorMsg.style.display = "block";
+        return false;
     } else {
         errorMsg.textContent = "";
         errorMsg.style.display = "none";
+        return true;
     }
 }
 
 function validateForm() {
     const fields = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal'];
+    invalidFields = [];
     for (const field of fields) {
         if (!validate(field)) {
             console.log("Validation failed for field: " + field);
@@ -142,7 +145,7 @@ function getErrorMessage(fieldId) {
         case 'cp':
             return "Chest Pain Type must be between 0 and 3.";
         case 'trestbps':
-            return "Resting Blood Pressure must be a number between 50 and 300.";
+            return "Resting Blood Pressure must be a number between 50 and 200.";
         case 'chol':
             return "Cholesterol must be a number between 100 and 600.";
         case 'fbs':
