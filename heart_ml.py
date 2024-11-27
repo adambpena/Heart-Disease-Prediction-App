@@ -1,10 +1,10 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, roc_curve, auc
+from sklearn.metrics import roc_curve, auc, mean_absolute_error, mean_squared_error
 import xgboost as xgb
 import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib  # for saving the model
+import joblib
 
 # Load the dataset
 data = pd.read_csv('heart.csv')
@@ -59,11 +59,21 @@ plt.xlabel("Importance Score")
 plt.title("Feature Importance in Gradient Boosting Model")
 plt.show()
 
-#Correlation Heatmap
-plt.figure(figsize=(10, 8))
 correlation = data.corr()
-sns.heatmap(correlation, annot=True, cmap='coolwarm', fmt='.2f')
+plt.figure(figsize=(10, 8))
+plt.imshow(correlation, cmap='coolwarm', aspect='auto')
+plt.colorbar(label="Correlation Coefficient") 
+
+for i in range(len(correlation)):
+    for j in range(len(correlation.columns)):
+        plt.text(j, i, f'{correlation.iloc[i, j]:.2f}',
+                 ha='center', va='center', color='black', fontsize=8)
+
+plt.xticks(range(len(correlation.columns)), correlation.columns, rotation=90)
+plt.yticks(range(len(correlation.columns)), correlation.columns)
+
 plt.title('Feature Correlation Heatmap')
+plt.tight_layout()
 plt.show()
 
 ### ROC and AUC Curve ###
@@ -71,28 +81,28 @@ y_pred_proba = model.predict_proba(X_test)[:, 1]
 fpr, tpr, _ = roc_curve(y_test, y_pred_proba)
 roc_auc = auc(fpr, tpr)
 
+#MAE and RMSE
+mae = mean_absolute_error(y_test, y_pred)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
 plt.figure(figsize=(8, 6))
 plt.plot(fpr, tpr, label=f'ROC curve (area = {roc_auc:.2f})')
+plt.fill_between(fpr, tpr, color='blue', alpha=0.2) 
 plt.plot([0, 1], [0, 1], 'k--')
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver Operating Characteristic (ROC)')
+plt.text(0.6, 0.2, f"MAE: {mae:.3f}\nRMSE: {rmse:.3f}", 
+         fontsize=10, bbox=dict(facecolor='white', alpha=0.7), ha='left')
 plt.legend(loc="lower right")
 plt.show()
 
 # Evaluate the model
-accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy:", accuracy)
-print("Classification Report:")
-print(classification_report(y_test, y_pred))
-print("Confusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
-
-report = classification_report(y_test, y_pred, output_dict=True)
-report_df = pd.DataFrame(report).transpose()
-plt.figure(figsize=(8, 6))
-sns.heatmap(report_df.iloc[:-1, :-1], annot=True, cmap="YlGnBu", fmt=".2f")
-plt.title("Classification Report")
-plt.show()
+# accuracy = accuracy_score(y_test, y_pred)
+# print("Accuracy:", accuracy)
+# print("Classification Report:")
+# print(classification_report(y_test, y_pred))
+# print("Confusion Matrix:")
+# print(confusion_matrix(y_test, y_pred))
